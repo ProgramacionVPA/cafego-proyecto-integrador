@@ -27,10 +27,13 @@ class ProductService(
             .map { productMapper.toResponse(it) }
     }
 
-    // Buscar por ID (Manejo de errores básico por ahora)
+    // En ProductService.kt -> findById
     fun findById(id: Long): ProductResponse? {
-        val foundProduct = productRepository.findById(id).orElse(null)
-        // Luego agregaremos la Exception personalizada aquí
-        return foundProduct?.let { productMapper.toResponse(it) }
+        val foundProduct = productRepository.findById(id)
+            .orElseThrow {
+                // Usamos la excepción EXACTA del paquete exceptions
+                com.cafego.backend.exceptions.ProductNotFoundException("Product with id $id not found")
+            }
+        return productMapper.toResponse(foundProduct)
     }
 }
