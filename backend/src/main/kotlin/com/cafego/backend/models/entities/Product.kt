@@ -17,7 +17,7 @@ data class Product(
     val price: Double,
 
     @Column(nullable = false)
-    val stock: Int,
+    var stock: Int,
 
     @Column(name = "is_available")
     val isAvailable: Boolean = true,
