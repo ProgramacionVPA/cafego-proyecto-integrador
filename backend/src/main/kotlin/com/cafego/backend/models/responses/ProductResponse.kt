@@ -10,10 +10,14 @@ data class ProductResponse(
     val price: Double,
     val stock: Int,
 
-    @JsonProperty("is_available") // Importante para el profe
+    @JsonProperty("is_available")
     val isAvailable: Boolean,
 
-    @JsonProperty("created_at")   // Estilo del profe
+    // --- NUEVO CAMPO ---
+    // Devolveremos solo los nombres: ["Caliente", "Desayuno"]
+    val tags: Set<String> = emptySet(),
+
+    @JsonProperty("created_at")
     val createdAt: LocalDateTime?,
 
     @JsonProperty("updated_at")
