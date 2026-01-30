@@ -1,8 +1,7 @@
 package com.cafego.backend.models.entities
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "products")
@@ -20,8 +19,16 @@ data class Product(
     @Column(nullable = false)
     val stock: Int,
 
-    // Mapeo exacto como le gusta al profe
     @Column(name = "is_available")
-    val isAvailable: Boolean = true
+    val isAvailable: Boolean = true,
 
-) : BaseEntity() // <--- ¡AQUÍ ESTÁ LA MAGIA! Hereda ID y Fechas
+    // --- NUEVO: Relación Muchos a Muchos ---
+    @ManyToMany(fetch = FetchType.EAGER) // EAGER para que traiga los tags al cargar el producto
+    @JoinTable(
+        name = "product_tags",
+        joinColumns = [JoinColumn(name = "product_id")],
+        inverseJoinColumns = [JoinColumn(name = "tag_id")]
+    )
+    val tags: MutableSet<Tag> = mutableSetOf()
+
+) : BaseEntity()

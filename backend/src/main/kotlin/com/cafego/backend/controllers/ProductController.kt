@@ -27,4 +27,9 @@ class ProductController(
     fun findById(@PathVariable id: Long): ProductResponse? {
         return productService.findById(id)
     }
+
+    @GetMapping("/search")
+    fun search(@RequestParam term: String): List<ProductResponse> {
+        return productService.searchProducts(term)
+    }
 }
