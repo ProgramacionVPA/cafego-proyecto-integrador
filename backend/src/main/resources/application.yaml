@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: cafego-backend
+
+  datasource:
+    # Conexión a tu Docker
+    url: jdbc:postgresql://localhost:5432/cafego
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    # Dialecto para PostgreSQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      # 'update' crea/actualiza las tablas automáticamente según tus entidades
+      ddl-auto: update
+    # Muestra las consultas SQL en la consola (útil para depurar)
+    show-sql: true
