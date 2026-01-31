@@ -1,5 +1,8 @@
 package com.cafego.backend.services
 
+// CORRECCIÓN AQUÍ: Importamos desde 'exceptions', no desde 'handlers'
+import com.cafego.backend.exceptions.ProductAlreadyExistsException
+import com.cafego.backend.exceptions.ProductNotFoundException
 import com.cafego.backend.mappers.ProductMapper
 import com.cafego.backend.models.entities.Tag
 import com.cafego.backend.models.requests.ProductRequest
@@ -12,31 +15,35 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
-    private val tagRepository: TagRepository, // <--- Inyectamos esto nuevo
+    private val tagRepository: TagRepository,
     private val productMapper: ProductMapper
 ) {
 
-    @Transactional // Importante: Si algo falla, no guarda nada (ni producto ni tags)
+    @Transactional
     fun save(request: ProductRequest): ProductResponse {
-        // 1. Convertimos el Request básico a Entidad
+        // --- EL GUARDIA (VALIDACIÓN DE DUPLICADOS) ---
+        if (productRepository.existsByName(request.name)) {
+            // Esto lanzará el error 400 que tienes configurado en tu GlobalExceptionHandler
+            throw ProductAlreadyExistsException("El producto '${request.name}' ya existe")
+        }
+        // ---------------------------------------------
+
+        // 1. Convertimos Request a Entidad
         val productEntity = productMapper.toEntity(request)
 
-        // 2. Procesamos las etiquetas (Tags)
+        // 2. Procesamos Etiquetas
         request.tags.forEach { tagName ->
-            // Buscamos si la etiqueta ya existe en la BD
             val tag = tagRepository.findByName(tagName)
                 .orElseGet {
-                    // Si NO existe, la creamos y guardamos al instante
                     tagRepository.save(Tag(name = tagName))
                 }
-            // Agregamos la etiqueta (nueva o existente) al producto
             productEntity.tags.add(tag)
         }
 
-        // 3. Guardamos el producto con sus relaciones
+        // 3. Guardamos
         val savedProduct = productRepository.save(productEntity)
 
-        // 4. Devolvemos la respuesta
+        // 4. Retornamos
         return productMapper.toResponse(savedProduct)
     }
 
@@ -50,12 +57,12 @@ class ProductService(
     fun findById(id: Long): ProductResponse? {
         val foundProduct = productRepository.findById(id)
             .orElseThrow {
-                com.cafego.backend.exceptions.ProductNotFoundException("El producto con id $id no existe")
+                ProductNotFoundException("El producto con id $id no existe")
             }
         return productMapper.toResponse(foundProduct)
     }
 
-    // Búsqueda inteligente (Search)
+    // Búsqueda inteligente
     fun searchProducts(term: String): List<ProductResponse> {
         val products = productRepository.search(term)
         return products.map { productMapper.toResponse(it) }

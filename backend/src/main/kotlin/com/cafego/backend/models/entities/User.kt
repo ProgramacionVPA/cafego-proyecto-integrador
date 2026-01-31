@@ -6,13 +6,16 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "users")
-data class User(
-    @Column(nullable = false, unique = true)
-    val email: String,
+class User(
+
+    @Column(nullable = false, unique = true) // La cédula no se puede repetir
+    val cedula: String,
 
     @Column(nullable = false)
-    val password: String, // Aquí guardaremos la contraseña
+    val fullName: String,
 
-    @Column(name = "full_name")
-    val fullName: String
+    @Column(nullable = false)
+    val email: String,
+
+
 ) : BaseEntity()

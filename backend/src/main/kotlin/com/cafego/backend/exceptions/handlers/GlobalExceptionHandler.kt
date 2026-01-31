@@ -52,7 +52,7 @@ class GlobalExceptionHandler {
     }
 
     // AGREGADO EXTRA: Validación de campos (@NotBlank, @Min)
-    // El profe no te pasó este, pero ES VITAL para que no salga error 500 si mandas precio negativo
+    // ES VITAL para que no salga error 500 si mandas precio negativo
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationErrors(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
         // Toma el primer error que encuentre y lo muestra

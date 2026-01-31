@@ -43,15 +43,14 @@ class InvoiceService(
             Pair(product, item.quantity)
         }
 
-        // 3. Crear la Factura
+        // 3. Crear la Factura (Nace con estado "PENDIENTE" por defecto en la Entidad)
         val invoice = Invoice(total = calculatedTotal, user = user)
 
         // 4. SEGUNDA PASADA: Descontar Stock y Guardar
         itemsToProcess.forEach { (product, quantity) ->
-
-            // A. Descontar Stock DIRECTAMENTE (Gracias al 'var')
+            // A. Descontar Stock
             product.stock = product.stock - quantity
-            val productUpdated = productRepository.save(product) // Guardamos el MISMO objeto
+            val productUpdated = productRepository.save(product)
 
             // B. Crear Detalle
             val detail = InvoiceDetail(
@@ -60,13 +59,32 @@ class InvoiceService(
                 product = productUpdated,
                 invoice = invoice
             )
-
             invoice.details.add(detail)
         }
 
         // 5. Guardar Factura Final
         val savedInvoice = invoiceRepository.save(invoice)
 
+        return invoiceMapper.toResponse(savedInvoice)
+    }
+
+
+    // 1. Ver pedidos pendientes (Pantalla de Cocina)
+    fun getPendingInvoices(): List<InvoiceResponse> {
+        val pendingInvoices = invoiceRepository.findByStatus("PENDIENTE")
+        return pendingInvoices.map { invoiceMapper.toResponse(it) }
+    }
+
+    // 2. Despachar Pedido (Botón de Entregar)
+    @Transactional
+    fun dispatchInvoice(id: Long): InvoiceResponse {
+        val invoice = invoiceRepository.findById(id)
+            .orElseThrow { ProductNotFoundException("Factura no encontrada con id: $id") }
+
+        // Cambiamos el sello a DESPACHADO
+        invoice.status = "DESPACHADO"
+
+        val savedInvoice = invoiceRepository.save(invoice)
         return invoiceMapper.toResponse(savedInvoice)
     }
 }

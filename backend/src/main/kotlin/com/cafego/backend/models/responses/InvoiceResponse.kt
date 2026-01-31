@@ -8,7 +8,9 @@ data class InvoiceResponse(
     val total: Double,
 
     @JsonProperty("client_name")
-    val clientName: String, // Devolvemos el nombre, no el objeto usuario entero
+    val clientName: String,
+
+    val status: String,
 
     val items: List<InvoiceItemResponse>,
 
@@ -16,7 +18,6 @@ data class InvoiceResponse(
     val createdAt: LocalDateTime?
 )
 
-// Detalle de cada ítem en la respuesta
 data class InvoiceItemResponse(
     val productName: String,
     val quantity: Int,

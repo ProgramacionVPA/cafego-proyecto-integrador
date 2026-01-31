@@ -17,7 +17,6 @@ data class ProductRequest(
     @field:Min(value = 0, message = "El stock no puede ser negativo")
     val stock: Int,
 
-    // --- NUEVO CAMPO ---
     // Recibe una lista de textos: ["Caliente", "Desayuno"]
     val tags: List<String> = emptyList()
 )

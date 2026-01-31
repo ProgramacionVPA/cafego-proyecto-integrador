@@ -12,7 +12,10 @@ class InvoiceMapper {
         return InvoiceResponse(
             id = entity.id ?: 0,
             total = entity.total,
-            clientName = entity.user.fullName, // Extraemos solo el nombre del cliente
+            clientName = entity.user.fullName,
+
+            status = entity.status,
+
             createdAt = entity.createdAt,
             items = entity.details.map { detail ->
                 InvoiceItemResponse(

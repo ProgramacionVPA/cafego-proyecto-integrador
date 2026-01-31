@@ -7,16 +7,16 @@ import jakarta.persistence.*
 data class Invoice(
 
     @Column(nullable = false)
-    val total: Double = 0.0,
+    val total: Double,
 
-    // Relación: Una factura pertenece a UN usuario
+    @Column(nullable = false)
+    var status: String = "PENDIENTE",
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
-    // Relación: Una factura tiene MUCHOS detalles
-    // (mappedBy = "invoice" significa que la tabla 'invoice_details' es la dueña de la relación)
-    @OneToMany(mappedBy = "invoice", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "invoice", cascade = [CascadeType.ALL], orphanRemoval = true)
     val details: MutableList<InvoiceDetail> = mutableListOf()
 
 ) : BaseEntity()

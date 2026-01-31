@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ProductRepository : JpaRepository<Product, Long> {
 
+    // 1. NUEVO: Para saber si ya existe el nombre
+    fun existsByName(name: String): Boolean
+
     // Búsqueda Doble: Busca si el término coincide con el Nombre del producto O con el Nombre de algun Tag
     @Query("""
         SELECT DISTINCT p FROM Product p 
