@@ -14,6 +14,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       # 'update' crea/actualiza las tablas automáticamente según tus entidades
-      ddl-auto: create-drop
+      ddl-auto: update #create-drop
     # Muestra las consultas SQL en la consola (útil para depurar)
     show-sql: true
