@@ -4,6 +4,7 @@ plugins {
 	id("org.springframework.boot") version "4.0.2"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("plugin.jpa") version "2.2.21"
+    jacoco
 }
 
 group = "com.cafego"
@@ -48,4 +49,18 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// ... (al final de tu archivo build.gradle.kts)
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // 1. Al terminar 'test', ejecuta el reporte
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // 2. El reporte necesita que los tests hayan corrido antes
+    reports {
+        xml.required.set(true)  // Para herramientas CI/CD
+        html.required.set(true) // 3. ¡ESTE es el que quiere el profe! (Web legible)
+    }
 }
