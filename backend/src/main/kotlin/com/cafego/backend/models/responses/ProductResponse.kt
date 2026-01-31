@@ -13,7 +13,6 @@ data class ProductResponse(
     @JsonProperty("is_available")
     val isAvailable: Boolean,
 
-    // --- NUEVO CAMPO ---
     // Devolveremos solo los nombres: ["Caliente", "Desayuno"]
     val tags: Set<String> = emptySet(),
 

@@ -27,7 +27,6 @@ class ProductMapper {
             stock = entity.stock,
             isAvailable = entity.isAvailable,
 
-            // --- AQUÍ ESTÁ EL TRUCO ---
             // Tomamos la lista de objetos Tag y extraemos solo sus nombres
             tags = entity.tags.map { it.name }.toSet(),
 

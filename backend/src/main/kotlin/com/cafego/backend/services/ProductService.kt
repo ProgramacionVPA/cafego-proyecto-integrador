@@ -23,10 +23,8 @@ class ProductService(
     fun save(request: ProductRequest): ProductResponse {
         // --- EL GUARDIA (VALIDACIÓN DE DUPLICADOS) ---
         if (productRepository.existsByName(request.name)) {
-            // Esto lanzará el error 400 que tienes configurado en tu GlobalExceptionHandler
             throw ProductAlreadyExistsException("El producto '${request.name}' ya existe")
         }
-        // ---------------------------------------------
 
         // 1. Convertimos Request a Entidad
         val productEntity = productMapper.toEntity(request)

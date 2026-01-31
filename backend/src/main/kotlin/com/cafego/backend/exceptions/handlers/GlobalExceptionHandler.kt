@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 /**
  * Manejador de excepciones
  * Traducir excepciones hacia codigos http
- * (Basado en la arquitectura del profesor)
  */
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -51,7 +50,7 @@ class GlobalExceptionHandler {
         )
     }
 
-    // AGREGADO EXTRA: Validación de campos (@NotBlank, @Min)
+    // Validación de campos (@NotBlank, @Min)
     // ES VITAL para que no salga error 500 si mandas precio negativo
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationErrors(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {

@@ -22,7 +22,7 @@ data class Product(
     @Column(name = "is_available")
     val isAvailable: Boolean = true,
 
-    // --- NUEVO: Relación Muchos a Muchos ---
+    //Relación Muchos a Muchos
     @ManyToMany(fetch = FetchType.EAGER) // EAGER para que traiga los tags al cargar el producto
     @JoinTable(
         name = "product_tags",

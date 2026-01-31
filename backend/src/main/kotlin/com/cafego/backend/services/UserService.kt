@@ -22,7 +22,7 @@ class UserService(
             // Creamos un request temporal para pasárselo al mapper
             val tempRequest = com.cafego.backend.controllers.UserIdentifyRequest(cedula, fullName, email)
 
-            // ¡AQUÍ ESTÁ LA MAGIA! Usamos toEntity
+            // Usamos toEntity
             val newUser = userMapper.toEntity(tempRequest)
 
             userRepository.save(newUser)

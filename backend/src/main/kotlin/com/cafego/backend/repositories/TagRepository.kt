@@ -7,6 +7,6 @@ import java.util.Optional
 
 @Repository
 interface TagRepository : JpaRepository<Tag, Long> {
-    // Buscamos por nombre para ver si ya existe (Ej: "Caliente")
+    // Buscamos por nombre para ver si ya existe ("Caliente")
     fun findByName(name: String): Optional<Tag>
 }
