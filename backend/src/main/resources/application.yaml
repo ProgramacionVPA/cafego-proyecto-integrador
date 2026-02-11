@@ -3,7 +3,7 @@ spring:
     name: cafego-backend
 
   datasource:
-    # Conexión a tu Docker
+    # Conexión a Docker
     url: jdbc:postgresql://localhost:5432/cafego
     username: admin
     password: admin
